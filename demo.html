@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" href="examp.css">
+        <title>Gold Ring</title>
+    </head>
+
+    <body>
+         <!-- Gold chain image in top left corner -->
+        <img src="Beautiful Wedding Rings gold.jpg" 
+             alt="Gold ring" 
+             class="corner-image top-left">
+             
+        <!-- Diamond ring image in bottom left corner -->
+        <img src="wedding-ring-18421.png" 
+             alt="Diamond Ring" 
+             class="corner-image bottom-left">
+        
+        <div class="product">
+          <h1 class="product__title">Gold Ring</h1>
+
+          <!-- Price Breakup Table -->
+          <div class="price-breakup" id="price-breakup">
+            <h3>Price Breakdown</h3>
+            <table class="price-table">
+              <tr>
+                <th>Component</th>
+                <th>Value</th>
+              </tr>
+              <tr>
+                <td>Gold Price (1.5g)</td>
+                <td id="gold-price"></td>
+              </tr>
+              <tr>
+                <td>Diamond Price(1.5ct)</td>
+                <td id="diamond-price"></td>
+              </tr>
+              <tr>
+                <td>Making Charges</td>
+                <td id="making-charges"></td>
+              </tr>
+              <tr class="total-row">
+                <td><strong>Total Price</strong></td>
+                <td id="total-price"><strong></strong></td>
+              </tr>
+            </table>
+          </div>
+
+          <!-- Variant Selector -->
+          <div class="product-variants">
+                 Metal Quality:
+              <div class="product-option">
+                <select id="metal-quality" class="variant-selector">
+                  <option value="14k">14k</option>
+                  <option value="18k">18k</option>
+                  <option value="22k">22k</option>
+                </select>
+              </div>
+          </div>
+
+          <!-- Add to Cart Button -->
+          <div class="product-form">
+            <button type="submit" class="add-to-cart">Add to Cart</button>
+          </div>
+        </div>
+
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+          // Variant data containing all pricing information
+          const variantData = {
+            '14k': {
+              title: '14k Gold Ring',
+              gold_price: 8000,       // ₹3,500 per gram (14k gold)
+              gold_weight: 1.5,       // 1.5 grams
+              diamond_price: 41850,   // ₹41,850 (diamond price)
+              making_charge: 1750,    // ₹1,750 making charges
+              making_charge_type: 'fixed' // 'fixed' or 'percentage'
+            },
+            '18k': {
+              title: '18k Gold Ring',
+              gold_price: 14000,       // ₹4,500 per gram (18k gold)
+              gold_weight: 1.5,
+              diamond_price: 41850,
+              making_charge: 2000,    // ₹2,000 making charges
+              making_charge_type: 'fixed'
+            },
+            '22k': {
+              title: '22k Gold Ring',
+              gold_price: 18000,       // ₹5,500 per gram (22k gold)
+              gold_weight: 1.5,
+              diamond_price: 41850,
+              making_charge: 2250,    // ₹2,250 making charges
+              making_charge_type: 'fixed'
+            }
+          };
+
+          const variantSelector = document.querySelector('.variant-selector');
+          
+          // Initialize the price table with default selected value
+          updatePriceBreakup(variantData['14k']);
+          
+          // Add event listener for variant changes
+          variantSelector.addEventListener('change', function() {
+            const selectedValue = this.value;
+            if (variantData[selectedValue]) {
+              updatePriceBreakup(variantData[selectedValue]);
+            }
+          });
+
+          // Function to update the price breakup table
+          function updatePriceBreakup(variant) {
+            // Calculate gold price (price per gram * weight)
+            const goldPrice = variant.gold_price * variant.gold_weight;
+            
+            // Calculate making charges
+            let makingCharges;
+            if (variant.making_charge_type === 'percentage') {
+              makingCharges = (goldPrice + variant.diamond_price) * (variant.making_charge / 100);
+            } else {
+              makingCharges = variant.making_charge;
+            }
+            
+            // Calculate total
+            const totalPrice = goldPrice + variant.diamond_price + makingCharges;
+            
+            // Update the DOM
+            document.getElementById('gold-price').textContent = `₹${goldPrice.toLocaleString('en-IN')}`;
+            document.getElementById('diamond-price').textContent = `₹${variant.diamond_price.toLocaleString('en-IN')}`;
+            
+            const makingChargesCell = document.getElementById('making-charges');
+            if (variant.making_charge_type === 'percentage') {
+              makingChargesCell.textContent = `${variant.making_charge}% (₹${makingCharges.toLocaleString('en-IN')})`;
+            } else {
+              makingChargesCell.textContent = `₹${makingCharges.toLocaleString('en-IN')}`;
+            }
+            
+            document.getElementById('total-price').innerHTML = `<strong>₹${totalPrice.toLocaleString('en-IN')}</strong>`;
+          }
+        });
+        </script>
+    </body>
+
+</html>
